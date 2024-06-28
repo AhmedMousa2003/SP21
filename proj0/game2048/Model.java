@@ -171,8 +171,29 @@ public class Model extends Observable {
      * 1. There is at least one empty space on the board.
      * 2. There are two adjacent tiles with the same value.
      */
+    private static int[] dx = {-1 ,1, 0, 0};
+    private static int[] dy = {0, 0, -1, 1};
+    private static boolean valid(int col, int row){
+        if (row >= 0 && row < 4 && col >= 0 && col < 4) {
+            return true;
+        }
+        return false;
+    }
     public static boolean atLeastOneMoveExists(Board b) {
-        // TODO: Fill in this function.
+        for (int i = 0; i < 4; ++i){
+            for (int j = 0 ; j < 4; ++j){
+                if (b.tile(i, j) == null){
+                    return true;
+                }
+                int cur_val = b.tile(i, j).value();
+                for (int k = 0; k < 4; ++k){
+                    int ni = i + dx[k], nj = j + dy[k];
+                    if (valid(ni, nj) && (b.tile(ni, nj) == null || b.tile(ni,nj).value() == cur_val)){
+                        return true;
+                    }
+                }
+            }
+        }
         return false;
     }
 
