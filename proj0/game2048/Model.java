@@ -64,6 +64,7 @@ public class Model extends Observable {
         checkGameOver();
         if (gameOver) {
             maxScore = Math.max(score, maxScore);
+            score = 0;
         }
         return gameOver;
     }
@@ -106,9 +107,9 @@ public class Model extends Observable {
      *    value, then the leading two tiles in the direction of motion merge,
      *    and the trailing tile does not.
      * */
-    private static Integer get_value(Tile t){
+    private static int get_value(Tile t){
         if (t == null)
-            return null;
+            return 0;
         return t.value();
     }
     private static int max (int a, int b){
@@ -120,41 +121,41 @@ public class Model extends Observable {
     public boolean tilt(Side side) {
         boolean changed;
         changed = false;
-        String s = InputSource.getKey();
-        if (s.equals("Down")){
-            board.setViewingPerspective(Side.SOUTH);
-        } else if (s.equals("Right")){
-            board.setViewingPerspective(Side.EAST);
-        }else if (s.equals("Left")){
-            board.setViewingPerspective(Side.WEST);
-        }
+        board.setViewingPerspective(side);
         for (int c = 0; c < board.size(); ++c){
             int up_previous = 3;
-            Integer up_value = get_value(board.tile(c, 3));
+            int up_value = get_value(board.tile(c, 3));
             for (int r = board.size() - 2; r >= 0; --r){
                 Tile t = board.tile(c, r);
                 if (t == null){
                     continue;
                 }
-                if (up_value == null){
+                if (up_value == 0){
                     board.move(c, up_previous, t);
-                    up_value = t.value();
+                    up_value = get_value(t);
                     changed = true;
+                    t = null;
                 }else if ((int)up_value == t.value()) {
                     board.move(c, up_previous, t);
                     changed = true;
                     score += 2 * t.value();
                     up_previous--;
-                    up_value = null;
+                    up_value = 0;
+                    t = null;
                 }else if(up_previous - 1 != r){
+                    --up_previous;
                     board.move(c, up_previous, t);
-                    up_value = t.value();
+                    up_value = get_value(t);
                     changed = true;
+                    t = null;
+                }else {
+                    up_value = get_value(t);
+                    --up_previous;
                 }
             }
         }
-        checkGameOver();
         board.setViewingPerspective(Side.NORTH);
+        checkGameOver();
         if (gameOver){
             maxScore = max(maxScore, score);
             score = 0;
