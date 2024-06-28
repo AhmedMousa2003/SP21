@@ -5,7 +5,7 @@ import java.util.Observable;
 
 
 /** The state of a game of 2048.
- *  @author TODO: YOUR NAME HERE
+ *  @author Ahmed Mousa
  */
 public class Model extends Observable {
     /** Current contents of the board. */
@@ -106,15 +106,59 @@ public class Model extends Observable {
      *    value, then the leading two tiles in the direction of motion merge,
      *    and the trailing tile does not.
      * */
+    private static Integer get_value(Tile t){
+        if (t == null)
+            return null;
+        return t.value();
+    }
+    private static int max (int a, int b){
+        if (a > b){
+            return a;
+        }
+        return b;
+    }
     public boolean tilt(Side side) {
         boolean changed;
         changed = false;
-
-        // TODO: Modify this.board (and perhaps this.score) to account
-        // for the tilt to the Side SIDE. If the board changed, set the
-        // changed local variable to true.
-
+        String s = InputSource.getKey();
+        if (s.equals("Down")){
+            board.setViewingPerspective(Side.SOUTH);
+        } else if (s.equals("Right")){
+            board.setViewingPerspective(Side.EAST);
+        }else if (s.equals("Left")){
+            board.setViewingPerspective(Side.WEST);
+        }
+        for (int c = 0; c < board.size(); ++c){
+            int up_previous = 3;
+            Integer up_value = get_value(board.tile(c, 3));
+            for (int r = board.size() - 2; r >= 0; --r){
+                Tile t = board.tile(c, r);
+                if (t == null){
+                    continue;
+                }
+                if (up_value == null){
+                    board.move(c, up_previous, t);
+                    up_value = t.value();
+                    changed = true;
+                }else if ((int)up_value == t.value()) {
+                    board.move(c, up_previous, t);
+                    changed = true;
+                    score += 2 * t.value();
+                    up_previous--;
+                    up_value = null;
+                }else if(up_previous - 1 != r){
+                    board.move(c, up_previous, t);
+                    up_value = t.value();
+                    changed = true;
+                }
+            }
+        }
         checkGameOver();
+        board.setViewingPerspective(Side.NORTH);
+        if (gameOver){
+            maxScore = max(maxScore, score);
+            score = 0;
+        }
         if (changed) {
             setChanged();
         }
