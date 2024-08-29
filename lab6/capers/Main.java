@@ -4,6 +4,8 @@ import java.io.File;
 
 import static capers.Utils.*;
 
+import java.util.Arrays;
+
 /** Canine Capers: A Gitlet Prelude.
  * @author TODO
 */
@@ -52,11 +54,20 @@ public class Main {
             break;
         case "dog":
             validateNumArgs("dog", args, 4);
-            // TODO: make a dog
+            String name = args[1];
+            String breed = args[2];
+            Integer age = 0;
+            try {
+                age = Integer.parseInt(args[3]);
+            }catch (NumberFormatException e){
+                exitWithError(String.format("Invalid age: %s", args[3]));
+            }
+            CapersRepository.makeDog(name, breed, age);
             break;
         case "birthday":
             validateNumArgs("birthday", args, 2);
-            // TODO: celebrate this dog's birthday
+            String cur_name = args[1];
+            CapersRepository.celebrateBirthday(cur_name);
             break;
         default:
             exitWithError(String.format("Unknown command: %s", args[0]));
