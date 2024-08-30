@@ -57,6 +57,8 @@ public class Dog implements Serializable{
         age += 1;
         System.out.println(toString());
         System.out.println("Happy birthday! Woof! Woof!");
+        File file = new File(DOG_FOLDER, File_Name);
+        writeObject(file, this);
     }
 
     /**
