@@ -226,18 +226,5 @@ public class BSTMap<K extends Comparable<K> , V> implements Map61B<K, V> {
         System.out.println(T.key + " " + T.val);
         printInOrder(T.right);
     }
-
-    public static void main(String[] args){
-        Map61B<String, Integer> cur = new BSTMap<>();
-
-        cur.put("Ahmed", 15);
-
-        System.out.println(cur.size());
-
-        cur.remove("Ahmed");
-        System.out.println(cur.size());
-
-        System.out.println(cur.containsKey(null));
-    }
-
+    
 }
