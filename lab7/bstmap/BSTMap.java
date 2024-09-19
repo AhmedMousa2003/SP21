@@ -9,6 +9,7 @@ public class BSTMap<k extends Comparable<k> , v> implements Map61B<k, v> {
 
     private Node root;
 
+    /** Required data for each Node */
     private class Node{
         public Node left , right;
         private k key;
@@ -88,11 +89,13 @@ public class BSTMap<k extends Comparable<k> , v> implements Map61B<k, v> {
         return T;
     }
 
+    /** Get the size of the subtree of a certain node in the BST */
     private int getSz(Node T){
         if (T == null) return 0;
         return T.sz;
     }
 
+    /** Return a set of keys included in the BST */
     @Override
     public Set<k> keySet(){
         Set<k> keys = new TreeSet<>();
@@ -107,15 +110,14 @@ public class BSTMap<k extends Comparable<k> , v> implements Map61B<k, v> {
         addToSet(T.right, keys);
     }
 
+    /** Remove the node with a certain key if found in the tree and corresponding methods */
+
     @Override
     public v remove(k key){
         v ret = get(key);
         root = remove(root, key);
         return ret;
     }
-
-
-    /** Remove the node with a certain key if found in the tree */
 
     private Node remove(Node T, k key){
         if (T == null) return null;
@@ -162,6 +164,7 @@ public class BSTMap<k extends Comparable<k> , v> implements Map61B<k, v> {
     }
 
 
+    /** Return an iterator class to make iterable */
     @Override
     public Iterator<k> iterator() {
         return new getIterator();
@@ -221,20 +224,6 @@ public class BSTMap<k extends Comparable<k> , v> implements Map61B<k, v> {
         printInOrder(T.left);
         System.out.println(T.key + " " + T.val);
         printInOrder(T.right);
-    }
-
-    public static void main(String[] args){
-        BSTMap<String, Integer> cur = new BSTMap<>();
-        cur.put("Ahmed", 21);
-        cur.put("Marwan", 16);
-        cur.put("Kimo", 28);
-        cur.put("Noran", 25);
-        cur.put("Mohamed", 31);
-        cur.put("Mama", 52);
-        cur.put("Baba", 68);
-        for (String key : cur) {
-            System.out.println(key);
-        }
     }
 
 }
