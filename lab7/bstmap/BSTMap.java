@@ -2,6 +2,7 @@ package bstmap;
 
 import bstmap.Map61B;
 
+import java.util.TreeSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.Spliterator;
@@ -97,8 +98,17 @@ public class BSTMap<k extends Comparable<k> , v> implements Map61B<k, v> {
 
     @Override
     public Set<k> keySet(){
-        throw new UnsupportedOperationException("Not supported yet.");
-    };
+        Set<k> keys = new TreeSet<>();
+        addToSet(root, keys);
+        return keys;
+    }
+
+    private void addToSet(Node T, Set<k> keys){
+        if (T == null) return;
+        addToSet(T.left, keys);
+        keys.add(T.key);
+        addToSet(T.right, keys);
+    }
 
     @Override
     public v remove(k key){
