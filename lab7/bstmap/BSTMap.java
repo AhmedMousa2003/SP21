@@ -2,10 +2,7 @@ package bstmap;
 
 import bstmap.Map61B;
 
-import java.util.TreeSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.Spliterator;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class BSTMap<k extends Comparable<k> , v> implements Map61B<k, v> {
@@ -167,7 +164,51 @@ public class BSTMap<k extends Comparable<k> , v> implements Map61B<k, v> {
 
     @Override
     public Iterator<k> iterator() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return new getIterator();
+    }
+
+    private class getIterator implements Iterator<k>{
+        Queue<k> queue;
+        public getIterator(){
+            queue = this.getQueue();
+        }
+
+        private Queue<k> getQueue(){
+            if (root.sz == 0)
+                return new LinkedList<>();
+            Queue<k> queue = new LinkedList<>();
+            getQueue(root, queue);
+            return queue;
+        }
+
+        private void getQueue(Node T, Queue<k> queue){
+            if (T == null)
+                return;
+            getQueue(T.left, queue);
+            queue.add(T.key);
+            getQueue(T.right, queue);
+        }
+
+        public boolean hasNext(){
+            return !queue.isEmpty();
+        }
+
+        public k next(){
+            return queue.remove();
+        }
+
+
+    }
+
+    private void getQueue(Node T, Queue<k> queue){
+        if (T == null) return;
+        getQueue(T.left, queue);
+        queue.add(T.key);
+        getQueue(T.right, queue);
+    }
+
+    public boolean isEmpty(){
+        return root.sz == 0;
     }
 
     /** print the key and value in order */
@@ -184,12 +225,16 @@ public class BSTMap<k extends Comparable<k> , v> implements Map61B<k, v> {
 
     public static void main(String[] args){
         BSTMap<String, Integer> cur = new BSTMap<>();
-
-        cur.put("Ahmed", 50);
-        cur.put("Mahmoud", 200);
-        cur.printInOrder();
-        cur.remove("Mahmoud");
-        cur.printInOrder();
+        cur.put("Ahmed", 21);
+        cur.put("Marwan", 16);
+        cur.put("Kimo", 28);
+        cur.put("Noran", 25);
+        cur.put("Mohamed", 31);
+        cur.put("Mama", 52);
+        cur.put("Baba", 68);
+        for (String key : cur) {
+            System.out.println(key);
+        }
     }
 
 }
