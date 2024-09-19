@@ -26,6 +26,7 @@ public class BSTMap<K extends Comparable<K> , V> implements Map61B<K, V> {
     @Override
     public void clear(){
         clear(this.root);
+        root = null;
     }
 
     private void clear(Node T){
@@ -65,7 +66,7 @@ public class BSTMap<K extends Comparable<K> , V> implements Map61B<K, V> {
     /** Return the size of the BSTMap */
     @Override
     public int size(){
-        return this.root.sz;
+        return getSz(root);
     }
 
     /** Map key with a certian value val */
@@ -210,7 +211,7 @@ public class BSTMap<K extends Comparable<K> , V> implements Map61B<K, V> {
         getQueue(T.right, queue);
     }
 
-    public boolean isEmpty(){
+    private boolean isEmpty(){
         return root.sz == 0;
     }
 
@@ -224,6 +225,19 @@ public class BSTMap<K extends Comparable<K> , V> implements Map61B<K, V> {
         printInOrder(T.left);
         System.out.println(T.key + " " + T.val);
         printInOrder(T.right);
+    }
+
+    public static void main(String[] args){
+        Map61B<String, Integer> cur = new BSTMap<>();
+
+        cur.put("Ahmed", 15);
+
+        System.out.println(cur.size());
+
+        cur.remove("Ahmed");
+        System.out.println(cur.size());
+
+        System.out.println(cur.containsKey(null));
     }
 
 }
