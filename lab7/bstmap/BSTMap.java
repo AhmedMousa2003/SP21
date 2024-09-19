@@ -5,17 +5,17 @@ import bstmap.Map61B;
 import java.util.*;
 import java.util.function.Consumer;
 
-public class BSTMap<k extends Comparable<k> , v> implements Map61B<k, v> {
+public class BSTMap<K extends Comparable<K> , V> implements Map61B<K, V> {
 
     private Node root;
 
     /** Required data for each Node */
     private class Node{
         public Node left , right;
-        private k key;
-        private v val;
+        private K key;
+        private V val;
         private int sz;
-        public Node(k key, v val, int sz){
+        public Node(K key,V val, int sz){
             this.key = key;
             this.val = val;
             this.sz = sz;
@@ -38,19 +38,19 @@ public class BSTMap<k extends Comparable<k> , v> implements Map61B<k, v> {
 
     /** Return true if the current key can be found in the BSTMap */
     @Override
-    public boolean containsKey(k key){
+    public boolean containsKey(K key){
         return get(key) != null;
     }
 
     /** Return the mapped value of a certain key */
     @Override
-    public v get(k key){
+    public V get(K key){
         if (key == null)
             return null;
         return get(this.root, key);
     }
 
-    private v get(Node T, k key){
+    private V get(Node T, K key){
         if (T == null) return null;
         int comp = key.compareTo(T.key);
         if (comp == 0){
@@ -70,12 +70,12 @@ public class BSTMap<k extends Comparable<k> , v> implements Map61B<k, v> {
 
     /** Map key with a certian value val */
     @Override
-    public void put (k key, v val){
+    public void put (K key, V val){
         if (key == null || val == null)  return;
         root = put(this.root, key, val);
     }
 
-    private Node put(Node T, k key, v val){
+    private Node put(Node T, K key, V val){
         if (T == null) return new Node(key, val, 1);
         int comp = key.compareTo(T.key);
         if (comp == 0){
@@ -97,13 +97,13 @@ public class BSTMap<k extends Comparable<k> , v> implements Map61B<k, v> {
 
     /** Return a set of keys included in the BST */
     @Override
-    public Set<k> keySet(){
-        Set<k> keys = new TreeSet<>();
+    public Set<K> keySet(){
+        Set<K> keys = new TreeSet<>();
         addToSet(root, keys);
         return keys;
     }
 
-    private void addToSet(Node T, Set<k> keys){
+    private void addToSet(Node T, Set<K> keys){
         if (T == null) return;
         addToSet(T.left, keys);
         keys.add(T.key);
@@ -113,13 +113,13 @@ public class BSTMap<k extends Comparable<k> , v> implements Map61B<k, v> {
     /** Remove the node with a certain key if found in the tree and corresponding methods */
 
     @Override
-    public v remove(k key){
-        v ret = get(key);
+    public V remove(K key){
+        V ret = get(key);
         root = remove(root, key);
         return ret;
     }
 
-    private Node remove(Node T, k key){
+    private Node remove(Node T, K key){
         if (T == null) return null;
         int comp = key.compareTo(T.key);
         if (comp < 0) {
@@ -157,7 +157,7 @@ public class BSTMap<k extends Comparable<k> , v> implements Map61B<k, v> {
         return getSuccessor(T.left);
     }
     @Override
-    public v remove(k key, v value){
+    public V remove(K key, V value){
         if (get(key) == value)
             return remove(key);
         return null;
@@ -166,25 +166,25 @@ public class BSTMap<k extends Comparable<k> , v> implements Map61B<k, v> {
 
     /** Return an iterator class to make iterable */
     @Override
-    public Iterator<k> iterator() {
+    public Iterator<K> iterator() {
         return new getIterator();
     }
 
-    private class getIterator implements Iterator<k>{
-        Queue<k> queue;
+    private class getIterator implements Iterator<K>{
+        Queue<K> queue;
         public getIterator(){
             queue = this.getQueue();
         }
 
-        private Queue<k> getQueue(){
+        private Queue<K> getQueue(){
             if (root.sz == 0)
                 return new LinkedList<>();
-            Queue<k> queue = new LinkedList<>();
+            Queue<K> queue = new LinkedList<>();
             getQueue(root, queue);
             return queue;
         }
 
-        private void getQueue(Node T, Queue<k> queue){
+        private void getQueue(Node T, Queue<K> queue){
             if (T == null)
                 return;
             getQueue(T.left, queue);
@@ -196,14 +196,14 @@ public class BSTMap<k extends Comparable<k> , v> implements Map61B<k, v> {
             return !queue.isEmpty();
         }
 
-        public k next(){
+        public K next(){
             return queue.remove();
         }
 
 
     }
 
-    private void getQueue(Node T, Queue<k> queue){
+    private void getQueue(Node T, Queue<K> queue){
         if (T == null) return;
         getQueue(T.left, queue);
         queue.add(T.key);
